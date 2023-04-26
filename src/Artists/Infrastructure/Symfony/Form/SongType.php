@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Form;
+namespace App\Artists\Infrastructure\Symfony\Form;
 
-use App\Entity\Song;
+use App\Artists\Domain\Entity\Song;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

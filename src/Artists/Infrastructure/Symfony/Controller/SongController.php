@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace App\Artists\Infrastructure\Symfony\Controller;
 
-use App\Entity\Song;
-use App\Form\SongType;
-use App\Repository\SongRepository;
+use App\Artists\Domain\Entity\Song;
+use App\Artists\Domain\Repository\SongRepository;
+use App\Artists\Infrastructure\Symfony\Form\SongType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

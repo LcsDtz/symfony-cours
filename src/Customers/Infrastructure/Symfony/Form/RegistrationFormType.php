@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Form;
+namespace App\Customers\Infrastructure\Symfony\Form;
 
-use App\Entity\User;
+use App\Customers\Domain\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -20,13 +20,14 @@ class RegistrationFormType extends AbstractType
             ->add('email')
             ->add('displayName')
             ->add('artist', CheckboxType::class, [
-                'mapped' => false
+                'mapped' => false,
+                'required' => false,
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'Acceptez les conditions générales d\'utilisation',
+                        'message' => 'Merci d\'accepter nos CGU',
                     ]),
                 ],
             ])
@@ -37,11 +38,11 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Mot de passe',
+                        'message' => 'Merci de saisir un password',
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Rentrez 6 caractères minimum',
+                        'minMessage' => 'Votre password devrait être au minimum de {{ limit }} caractères',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),

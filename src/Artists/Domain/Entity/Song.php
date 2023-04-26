@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Artists\Domain\Entity;
 
-use App\Repository\SongRepository;
+use App\Artists\Domain\Repository\SongRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

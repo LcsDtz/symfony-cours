@@ -12,7 +12,7 @@
             {{ app.user.displayName }} <a href="{{ path('app_logout') }}">Déconnexion</a>
         </div>
         <div class="md-3">
-            {{ render(controller('App\\Controller\\SongController::index')) }}
+            {{ render(controller('App\\Artists\\Infrastructure\\Symfony\\Controller\\SongController::index')) }}
         </div>
     {% else %}
         <div class="md-3">

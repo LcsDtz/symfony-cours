@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <div>
+        <h1>Bienvenue sur Moussaka !</h1>
+    </div>
+
+    {% if app.user %}
+        <div class="md-3">
+            {{ app.user.displayName }} <a href="{{ path('app_logout') }}">Déconnexion</a>
+        </div>
+        <div class="md-3">
+            {{ render(controller('App\\Controller\\SongController::index')) }}
+        </div>
+    {% else %}
+        <div class="md-3">
+            <a href="{{ path('app_login') }}">Connexion</a>
+        </div>
+        <div class="md-3">
+            <a href="{{ path('app_register') }}">Inscription</a>
+        </div>
+    {% endif %}
+{% endblock %}

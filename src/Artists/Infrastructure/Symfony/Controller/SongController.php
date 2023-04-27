@@ -24,7 +24,7 @@ class SongController extends AbstractController
     public function index(SongRepository $songRepository): Response
     {
         return $this->render('song/index.html.twig', [
-            'songs' => $songRepository->findAll(),
+            'songs' => $this->getArtistUser()->getSongs(),
         ]);
     }
 
@@ -34,18 +34,14 @@ class SongController extends AbstractController
     {
         $song = new Song();
 
-        $artistRepo = $this->entityManager->getRepository(Artist::class);
-        $user = $this->getUser();
-        $artist = $artistRepo->findOneBy(['user' => $user]);
-
         $form = $this->createForm(SongType::class, $song, [
-            'label' => $artist,
+            'label' => $this->getArtistUser(),
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $songRepository->save($song, true);
-            $song->addArtist($artist);
+            $song->addArtist($this->getArtistUser());
             $song->addAlbum($form->get('albums')->getData());
             $this->entityManager->persist($song);
             $this->entityManager->flush();
@@ -95,5 +91,12 @@ class SongController extends AbstractController
         }
 
         return $this->redirectToRoute('app_homepage', [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function getArtistUser()
+    {
+        $artistRepo = $this->entityManager->getRepository(Artist::class);
+        $user = $this->getUser();
+        return $artistRepo->findOneBy(['user' => $user]);
     }
 }

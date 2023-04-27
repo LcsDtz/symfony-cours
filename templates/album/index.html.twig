@@ -9,20 +9,15 @@
         </thead>
         <tbody>
         {% for album in albums %}
-            {{ dump(album.artist) }}
-            {% if album.artist %}
-                {#{% if album.artist.name == user.displayName %}
-                    <tr>
-                        <td>{{ album.name }}</td>
-                        <td>
-                            <a href="{{ path('app_album_show', {'id': album.id}) }}">Voir</a>
-                            {% if is_granted('ROLE_ARTIST') %}
-                                <a href="{{ path('app_album_edit', {'id': album.id}) }}">Modifier</a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endif %}#}
-            {% endif %}
+            <tr>
+                <td>{{ album.name }}</td>
+                <td>
+                    <a href="{{ path('app_album_show', {'id': album.id}) }}">Voir</a>
+                    {% if is_granted('ROLE_ARTIST') %}
+                        <a href="{{ path('app_album_edit', {'id': album.id}) }}">Modifier</a>
+                    {% endif %}
+                </td>
+            </tr>
         {% else %}
             <tr>
                 <td colspan="5">Playlist vide</td>

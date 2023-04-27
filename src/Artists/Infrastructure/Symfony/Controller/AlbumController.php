@@ -24,7 +24,7 @@ class AlbumController extends AbstractController
     public function index(AlbumRepository $albumRepository): Response
     {
         return $this->render('album/index.html.twig', [
-            'albums' => $albumRepository->findAll(),
+            'albums' => $this->getArtistUser()->getAlbums(),
         ]);
     }
 
@@ -39,11 +39,7 @@ class AlbumController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $albumRepository->save($album, true);
 
-            $artistRepo = $this->entityManager->getRepository(Artist::class);
-            $user = $this->getUser();
-            $artist = $artistRepo->findOneBy(['user' => $user]);
-
-            $album->setArtist($artist);
+            $album->setArtist($this->getArtistUser());
 
             $this->entityManager->persist($album);
             $this->entityManager->flush();
@@ -53,7 +49,6 @@ class AlbumController extends AbstractController
         return $this->renderForm('album/new.html.twig', [
             'album' => $album,
             'form' => $form,
-            'user' => $this->getUser(),
         ]);
     }
 
@@ -93,5 +88,12 @@ class AlbumController extends AbstractController
         }
 
         return $this->redirectToRoute('app_homepage', [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function getArtistUser()
+    {
+        $artistRepo = $this->entityManager->getRepository(Artist::class);
+        $user = $this->getUser();
+        return $artistRepo->findOneBy(['user' => $user]);
     }
 }

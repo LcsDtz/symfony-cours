@@ -11,8 +11,7 @@ class ArtistRegistrationHandler
 {
     public function __invoke(UserRegistration $userRegistration): void
     {
-        if ($userRegistration->form->get('artist')->getData())
-        {
+        if ($userRegistration->form->get('artist')->getData()) {
             $artist = new Artist();
             $artist->setName($userRegistration->user->getDisplayName());
             $artist->setUser($userRegistration->user);

@@ -2,6 +2,7 @@
 
 namespace App\Artists\Domain\Entity;
 
+use App\Artists\Domain\Repository\AlbumRepository;
 use App\Artists\Domain\Repository\SongRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -27,12 +28,16 @@ class Song
 
     private ?File $file = null;
 
-    #[ORM\ManyToMany(targetEntity: Artist::class, mappedBy: 'Songs')]
-    private Collection $artists;
+    #[ORM\ManyToMany(targetEntity: Artist::class, mappedBy: 'songs')]
+    private ?Collection $artists;
+
+    #[ORM\ManyToMany(targetEntity: Album::class, mappedBy: 'songs')]
+    private ?Collection $albums;
 
     public function __construct()
     {
         $this->artists = new ArrayCollection();
+        $this->albums = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,10 +81,7 @@ class Song
         return $this;
     }
 
-    /**
-     * @return Collection<int, Artist>
-     */
-    public function getArtists(): Collection
+    public function getArtists(): ?Collection
     {
         return $this->artists;
     }
@@ -98,6 +100,30 @@ class Song
     {
         if ($this->artists->removeElement($artist)) {
             $artist->removeSong($this);
+        }
+
+        return $this;
+    }
+
+    public function getAlbums(): ?Collection
+    {
+        return $this->albums;
+    }
+
+    public function addAlbum(Album $album): self
+    {
+        if (!$this->albums->contains($album)) {
+            $this->albums->add($album);
+            $album->addSong($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlbum(Album $album): self
+    {
+        if ($this->albums->removeElement($album)) {
+            $album->removeSong($this);
         }
 
         return $this;

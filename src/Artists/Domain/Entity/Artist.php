@@ -14,21 +14,25 @@ class Artist
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
-    private ?int $id = null;
+    private string $id;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'artists')]
-    private User $user;
+    private ?User $user;
 
     #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'artists')]
-    private Collection $songs;
+    private ?Collection $songs;
+
+    #[ORM\OneToMany(mappedBy: 'artist', targetEntity: Album::class)]
+    private ?Collection $albums;
 
     public function __construct()
     {
         $this->id = (string) (new UuidV4());
         $this->songs = new ArrayCollection();
+        $this->albums = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -60,7 +64,7 @@ class Artist
         return $this;
     }
 
-    public function getSongs(): Collection
+    public function getSongs(): ?Collection
     {
         return $this->songs;
     }
@@ -75,6 +79,25 @@ class Artist
     public function removeSong(Song $song): Artist
     {
         $this->songs->removeElement($song);
+
+        return $this;
+    }
+
+    public function getAlbums(): ?Collection
+    {
+        return $this->albums;
+    }
+
+    public function addAlbum(Album $album): Artist
+    {
+        $this->albums->add($album);
+
+        return $this;
+    }
+
+    public function removeAlbum(Album $album): Artist
+    {
+        $this->albums->removeElement($album);
 
         return $this;
     }

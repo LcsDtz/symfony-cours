@@ -5,6 +5,7 @@ namespace App\Customers\Domain\Entity;
 use App\Artists\Domain\Entity\Artist;
 use App\Customers\Domain\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -35,8 +36,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Artist::class)]
-    private ArrayCollection $artists;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Artist::class, cascade: ['persist'])]
+    private Collection $artists;
 
     public function __construct()
     {
@@ -76,7 +77,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -109,8 +109,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+
     }
 
     public function getDisplayName(): ?string
@@ -137,7 +136,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getArtists(): ArrayCollection
+    public function getArtists(): Collection
     {
         return $this->artists;
     }

@@ -23,7 +23,7 @@ class Artist
     private User $user;
 
     #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'artists')]
-    private ArrayCollection $songs;
+    private Collection $songs;
 
     public function __construct()
     {

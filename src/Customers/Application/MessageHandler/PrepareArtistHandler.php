@@ -5,7 +5,7 @@ namespace App\Customers\Application\MessageHandler;
 use App\Customers\Application\Message\UserRegistration;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler(priority: 128)]
+#[AsMessageHandler(priority: 64)]
 final class PrepareArtistHandler
 {
     public function __invoke(UserRegistration $userRegistration): void

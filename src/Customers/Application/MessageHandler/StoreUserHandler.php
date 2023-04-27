@@ -17,5 +17,6 @@ class StoreUserHandler
     {
         $this->entityManager->persist($userRegistration->user);
         $this->entityManager->flush();
+
     }
 }

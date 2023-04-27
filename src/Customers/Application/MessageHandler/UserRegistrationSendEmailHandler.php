@@ -3,6 +3,7 @@
 namespace App\Customers\Application\MessageHandler;
 
 use App\Customers\Application\Message\UserRegistration;
+use App\Customers\Domain\Entity\User;
 use App\Customers\Infrastructure\Symfony\Security\EmailVerifier;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -15,7 +16,7 @@ final class UserRegistrationSendEmailHandler
     {
     }
 
-    public function __invoke(UserRegistration $message): void
+    public function __invoke(UserRegistration $message): User
     {
         $this->emailVerifier->sendEmailConfirmation('app_verify_email', $message->user,
             (new TemplatedEmail())
@@ -24,5 +25,7 @@ final class UserRegistrationSendEmailHandler
                 ->subject('Merci de confirmer votre email')
                 ->htmlTemplate('registration/confirmation_email.html.twig')
         );
+
+        return $message->user;
     }
 }

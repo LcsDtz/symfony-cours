@@ -6,8 +6,8 @@ use App\Customers\Application\Message\UserRegistration;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-#[AsMessageHandler(priority: 64)]
-final class SecureUserHandler
+#[AsMessageHandler(priority: 128)]
+class SecureUserHandler
 {
     public function __construct(private readonly UserPasswordHasherInterface $userPasswordHasher)
     {

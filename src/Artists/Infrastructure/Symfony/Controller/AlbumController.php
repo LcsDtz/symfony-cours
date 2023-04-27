@@ -2,7 +2,6 @@
 
 namespace App\Artists\Infrastructure\Symfony\Controller;
 
-use App\Artists\Application\Message\ArtistRegistration;
 use App\Artists\Domain\Entity\Album;
 use App\Artists\Domain\Entity\Artist;
 use App\Artists\Domain\Repository\AlbumRepository;
@@ -11,8 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -56,6 +53,7 @@ class AlbumController extends AbstractController
         return $this->renderForm('album/new.html.twig', [
             'album' => $album,
             'form' => $form,
+            'user' => $this->getUser(),
         ]);
     }
 

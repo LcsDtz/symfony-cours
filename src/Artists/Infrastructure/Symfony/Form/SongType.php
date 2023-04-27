@@ -18,16 +18,19 @@ class SongType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /*dump($options);die;
-        $userAlbums = $this->entityManager->getRepository(Album::class)->findBy(['name' => $options['data']->id]);
-        $albums = [];
-        foreach ($userAlbums as $album) {
-            $albums = $album->getName();
-        }*/
+        $userAlbums = $this->entityManager->getRepository(Album::class)->findBy(['artist' => $options['label']]);
 
         $builder->add('name')
             ->add('duration')
-            ->add('filePath');
+            ->add('filePath')
+            ->add('albums', ChoiceType::class, [
+                'choices' => $userAlbums,
+                'choice_label' => 'name',
+                'multiple' => false,
+                'expanded' => false,
+                'mapped' => false,
+            ]);
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -33,18 +33,20 @@ class SongController extends AbstractController
     public function new(Request $request, SongRepository $songRepository): Response
     {
         $song = new Song();
-        $form = $this->createForm(SongType::class, $song);
+
+        $artistRepo = $this->entityManager->getRepository(Artist::class);
+        $user = $this->getUser();
+        $artist = $artistRepo->findOneBy(['user' => $user]);
+
+        $form = $this->createForm(SongType::class, $song, [
+            'label' => $artist,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $songRepository->save($song, true);
-
-            $artistRepo = $this->entityManager->getRepository(Artist::class);
-            $user = $this->getUser();
-            $artist = $artistRepo->findOneBy(['user' => $user]);
-
             $song->addArtist($artist);
-
+            $song->addAlbum($form->get('albums')->getData());
             $this->entityManager->persist($song);
             $this->entityManager->flush();
 

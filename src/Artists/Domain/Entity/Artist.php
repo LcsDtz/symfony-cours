@@ -3,81 +3,78 @@
 namespace App\Artists\Domain\Entity;
 
 use App\Artists\Domain\Repository\ArtistRepository;
+use App\Customers\Domain\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\UuidV4;
 
-#[ORM\Entity(repositoryClass: ArtistRepository::class)]
+#[ORM\Entity]
 class Artist
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'uuid')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $firstName = null;
+    private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $lastName = null;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'artists')]
+    private User $user;
 
     #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'artists')]
-    private Collection $Songs;
+    private ArrayCollection $songs;
 
     public function __construct()
     {
-        $this->Songs = new ArrayCollection();
+        $this->id = (string) (new UuidV4());
+        $this->songs = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function getFirstName(): ?string
+    public function getName(): ?string
     {
-        return $this->firstName;
+        return $this->name;
     }
 
-    public function setFirstName(string $firstName): self
+    public function getUser(): User
     {
-        $this->firstName = $firstName;
+        return $this->user;
+    }
+
+    public function setUser(User $user): Artist
+    {
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getLastName(): ?string
+    public function setName(?string $name): Artist
     {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): self
-    {
-        $this->lastName = $lastName;
+        $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Song>
-     */
     public function getSongs(): Collection
     {
-        return $this->Songs;
+        return $this->songs;
     }
 
-    public function addSong(Song $song): self
+    public function addSong(Song $song): Artist
     {
-        if (!$this->Songs->contains($song)) {
-            $this->Songs->add($song);
-        }
+        $this->songs->add($song);
 
         return $this;
     }
 
-    public function removeSong(Song $song): self
+    public function removeSong(Song $song): Artist
     {
-        $this->Songs->removeElement($song);
+        $this->songs->removeElement($song);
 
         return $this;
     }

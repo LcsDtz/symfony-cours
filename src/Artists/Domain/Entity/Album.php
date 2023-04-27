@@ -21,7 +21,7 @@ class Album
     #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'albums')]
     private Artist $artist;
 
-    #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'albums')]
+    #[ORM\ManyToMany(targetEntity: Song::class, inversedBy: 'albums', cascade: ['persist'])]
     private Collection $songs;
 
     public function __construct()

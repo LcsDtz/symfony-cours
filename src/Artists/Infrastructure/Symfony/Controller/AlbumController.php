@@ -2,18 +2,27 @@
 
 namespace App\Artists\Infrastructure\Symfony\Controller;
 
+use App\Artists\Application\Message\ArtistRegistration;
 use App\Artists\Domain\Entity\Album;
+use App\Artists\Domain\Entity\Artist;
 use App\Artists\Domain\Repository\AlbumRepository;
 use App\Artists\Infrastructure\Symfony\Form\AlbumType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/album')]
 class AlbumController extends AbstractController
 {
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
+
     #[Route('/', name: 'app_album_index', methods: ['GET'])]
     public function index(AlbumRepository $albumRepository): Response
     {
@@ -33,6 +42,14 @@ class AlbumController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $albumRepository->save($album, true);
 
+            $artistRepo = $this->entityManager->getRepository(Artist::class);
+            $user = $this->getUser();
+            $artist = $artistRepo->findOneBy(['user' => $user]);
+
+            $album->setArtist($artist);
+
+            $this->entityManager->persist($album);
+            $this->entityManager->flush();
             return $this->redirectToRoute('app_homepage', [], Response::HTTP_SEE_OTHER);
         }
 

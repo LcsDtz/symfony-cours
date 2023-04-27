@@ -2,7 +2,6 @@
 
 namespace App\Artists\Domain\Entity;
 
-use App\Artists\Domain\Repository\AlbumRepository;
 use App\Artists\Domain\Repository\SongRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -31,7 +30,7 @@ class Song
     #[ORM\ManyToMany(targetEntity: Artist::class, mappedBy: 'songs')]
     private ?Collection $artists;
 
-    #[ORM\ManyToMany(targetEntity: Album::class, mappedBy: 'songs')]
+    #[ORM\ManyToMany(targetEntity: Album::class, mappedBy: 'songs', cascade: ['persist'])]
     private ?Collection $albums;
 
     public function __construct()

@@ -36,12 +36,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Playlist::class, cascade: ['persist'])]
+    private Collection $playlists;
+
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Artist::class, cascade: ['persist'])]
     private Collection $artists;
 
     public function __construct()
     {
         $this->artists = new ArrayCollection();
+        $this->playlists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -144,5 +148,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function addArtist(Artist $artist): void
     {
         $this->artists->add($artist);
+    }
+
+    public function getPlaylists(): Collection
+    {
+        return $this->playlists;
+    }
+
+    public function addPlaylist(Playlist $playlist): void
+    {
+        $this->playlists->add($playlist);
+    }
+
+    public function removePlaylist(Playlist $playlist): void
+    {
+        $this->playlists->removeElement($playlist);
     }
 }

@@ -21,8 +21,13 @@ class SongController extends AbstractController
     }
 
     #[Route('/', name: 'app_song_index', methods: ['GET'])]
-    public function index(SongRepository $songRepository): Response
+    public function index(): Response
     {
+        if(!$this->getArtistUser()){
+            return $this->render('song/index.html.twig', [
+                'songs' => 'No songs yet',
+            ]);
+        }
         return $this->render('song/index.html.twig', [
             'songs' => $this->getArtistUser()->getSongs(),
         ]);

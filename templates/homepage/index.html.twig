@@ -17,6 +17,9 @@
         <div class="md-3">
             {{ render(controller('App\\Artists\\Infrastructure\\Symfony\\Controller\\AlbumController::index')) }}
         </div>
+        <div class="md-3">
+            {{ render(controller('App\\Customers\\Infrastructure\\Symfony\\Controller\\PlaylistController::index')) }}
+        </div>
     {% else %}
         <div class="md-3">
             <a href="{{ path('app_login') }}">Connexion</a>

@@ -21,8 +21,13 @@ class AlbumController extends AbstractController
     }
 
     #[Route('/', name: 'app_album_index', methods: ['GET'])]
-    public function index(AlbumRepository $albumRepository): Response
+    public function index(): Response
     {
+        if(!$this->getArtistUser()){
+            return $this->render('album/index.html.twig', [
+                'albums' => 'No albums yet',
+            ]);
+        }
         return $this->render('album/index.html.twig', [
             'albums' => $this->getArtistUser()->getAlbums(),
         ]);

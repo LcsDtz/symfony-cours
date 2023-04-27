@@ -2,7 +2,6 @@
 
 namespace App\Artists\Domain\Entity;
 
-use App\Artists\Domain\Repository\ArtistRepository;
 use App\Customers\Domain\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -69,14 +68,14 @@ class Artist
         return $this->songs;
     }
 
-    public function addSong(Song $song): Artist
+    public function addSong(?Song $song): Artist
     {
         $this->songs->add($song);
 
         return $this;
     }
 
-    public function removeSong(Song $song): Artist
+    public function removeSong(?Song $song): Artist
     {
         $this->songs->removeElement($song);
 

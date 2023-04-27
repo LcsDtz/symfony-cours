@@ -1,0 +1,31 @@
+ <h1>Playlist</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if playlists %}
+            {% for playlist in playlists %}
+                <tr>
+                    <td>{{ playlist.name }}</td>
+                    <td>
+                        <a href="{{ path('app_playlist_show', {'id': playlist.id}) }}">Voir</a>
+                        {% if is_granted('ROLE_ARTIST') %}
+                            <a href="{{ path('app_playlist_edit', {'id': playlist.id}) }}">Modifier</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">Playlist vide</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_playlist_new') }}">Créer une playlist</a>
+
